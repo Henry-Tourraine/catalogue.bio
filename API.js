@@ -8,6 +8,14 @@ let {getImages, getImagesWithOFF} = require("./image");
 
 var app = express();
 
+let a = process.argv.slice(2);
+let arguments={};
+for(let i=0; i<a.length-1; i+=2){
+    let t={};
+    t[a[i].replaceAll("-", "")]= a[i+1];
+    arguments={...arguments, ...t};
+}
+
 app.use(express.static('public'));
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -62,8 +70,8 @@ app.post('/', async function (req, res) {
 
 
 //nodeCmd.run('dir', (err, data, stderr) => console.log(data));
-app.listen(8000, () => {
- console.log("Server running on port 8000");
+app.listen(arguments.p, () => {
+ console.log("Server running on port "+arguments.p);
 });
 
 
