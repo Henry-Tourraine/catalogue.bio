@@ -35,8 +35,12 @@ const CREDENTIALS_PATH = path.join(process.cwd(), 'service2.json');
 
 async function loadSavedCredentialsIfExist() {
   try {
-    const content = await fsp.readFile(TOKEN_PATH);
-    const credentials = JSON.parse(content);
+    //const content = await fsp.readFile(TOKEN_PATH);
+    //const credentials = JSON.parse(content);
+    const credentials = {type:process.env.type,
+      client_id:process.env.client_id,
+      client_secret:process.env.client_secret,
+      refresh_token:process.env.refresh_token};
     return google.auth.fromJSON(credentials);
   } catch (err) {
     return null;

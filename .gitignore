@@ -3,3 +3,6 @@ node_modules/
 /playwright-report/
 /playwright/.cache/
 .env
+service.json
+service2.json
+token.json
