@@ -14,7 +14,7 @@ console.log(a.length)
 let arguments={};
 for(let i=0; i<a.length-1; i+=2){
     let t={};
-    t[a[i].replaceAll("-", "")]= a[i+1];
+    t[a[i].replace(/-/g, "")]= a[i+1];
     arguments={...arguments, ...t};
 }
 
