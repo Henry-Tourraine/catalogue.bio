@@ -9,6 +9,8 @@ let {getImages, getImagesWithOFF} = require("./image");
 var app = express();
 
 let a = process.argv.slice(2);
+console.log(a);
+console.log(a.length)
 let arguments={};
 for(let i=0; i<a.length-1; i+=2){
     let t={};
