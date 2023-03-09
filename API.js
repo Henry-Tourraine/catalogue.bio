@@ -4,6 +4,7 @@ let XLSX = require('xlsx');
 let { scrap } = require("./index.js");
 let openfoodfacts = require("./openfoodfacts");
 let {getImages, getImagesWithOFF} = require("./image");
+const { makeCompletion } = require("./chatGPT.js");
 //const nodeCmd = require('node-cmd');
 
 var app = express();
@@ -32,7 +33,7 @@ app.use(bodyParser.urlencoded({
 app.use(cors());
 
 app.post('/', async function (req, res) {
-   console.log("new request to /")
+   console.log("request to /")
    console.log(req.body.EANS);
    if(req.body.EANS == undefined) res.json({message: "no EANS"});
    let data = await scrap(req.body.EANS, req.body.name, true);
@@ -44,7 +45,7 @@ app.post('/', async function (req, res) {
  })
 
  app.post('/openfoodfacts', async function (req, res) {
-   console.log("new request to /openfoodfacts")
+   console.log("request to /openfoodfacts")
    console.log(req.body.EANS);
    if(req.body.EANS == undefined) res.json({message: "no EANS"});
    let data = await openfoodfacts(req.body.EANS, true);
@@ -55,7 +56,7 @@ app.post('/', async function (req, res) {
  })
 
  app.post('/images', async function (req, res) {
-   console.log("new request to /images")
+   console.log("request to /images")
    console.log(req.body.EANS);
    if(req.body.EANS == undefined) res.json({message: "no EANS"});
    let data = await getImages(req.body.EANS, true);
@@ -64,6 +65,23 @@ app.post('/', async function (req, res) {
    res.json({data: data, message: "everything is ok"}); 
   
  })
+
+ app.post('/descriptionCompletion', async function (req, res) {
+  console.log("request to /descriptionCompletion")
+  console.log(req.body.theme, req.body.searchKeyWords);
+  if(req.body.prompt == undefined) res.json({message: "no prompt"});
+  let response;
+  if(!!req.body.theme.trim() == true && !!req.body.searchKeyWords == true){
+    response = await makeCompletion(req.body.prompt, req.body.theme, req.body.searchKeyWords);
+  }else{
+    response = await makeCompletion(req.body.prompt);
+  }
+   console.log("responding")
+   console.log(response);
+  res.json({...response});
+   
+
+})
 
  app.get('/', function (req, res) {
     
