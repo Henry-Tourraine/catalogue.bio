@@ -12,7 +12,7 @@ async function sleep(time){
   return await new Promise((res, rej)=>{setTimeout(()=>res(), time)});
 }
 
-async function run(EANS, name, headless=true,){
+async function run(EANS, name, headless=true){
 
     const browser = await chromium.launch({headless});
     const context = await browser.newContext();

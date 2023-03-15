@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({
  */
 
 
-app.use(cors());
+//app.use(cors());
 
 app.post('/', async function (req, res) {
    console.log("request to /")
