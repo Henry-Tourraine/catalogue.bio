@@ -1,9 +1,18 @@
-let { chromium, devices, defineConfig } = require('@playwright/test');
+let { chromium, devices, 
+ } = require('@playwright/test');
 let writeXlsxFile = require('write-excel-file');
 let {writeXLSX} = require("./writeXLSX.js");
 let {saveToDrive} = require("./saveToDrive.js");
 const fs = require('fs');
 require("dotenv").config();
+
+
+module.exports = 
+({
+  use: {
+    video: 'on',
+  },
+});
 
 let data = [];
 let clickTimeout = { timeout: 3000000 }
@@ -12,15 +21,21 @@ async function sleep(time){
   return await new Promise((res, rej)=>{setTimeout(()=>res(), time)});
 }
 
-async function run(EANS, name, headless=true){
+async function run(EANS=["3483190000154"], name="test_", headless=false){
 
     const browser = await chromium.launch({headless});
-    const context = await browser.newContext();
+    const context = await browser.newContext({recordVideo: { 
+        dir: 'videos/',
+        size: { width: 640, height: 480 }
+     } });
     const page = await context.newPage();
 
    await connexion(page);
+   
+   
    //await getCollections(page);
    let id = await createCollection(page, name, browser, EANS);
+   context.close();
    return id;
 
   
@@ -77,7 +92,7 @@ async function createCollection(page, name, browser, EANS){
     }
     console.log("nouvelle collection trouvée : ", col_element != null);
     if(col_element != null){
-        await col_element.locator(".fa.fa-upload").first().click(clickTimeout);
+        await (await col_element.locator(".fa.fa-upload").first()).click(clickTimeout);
         await page.locator("#list_product").setInputFiles('./'+name+'.xlsx');
         await sleep(5000);
         await page.locator("button#go").click(clickTimeout);
@@ -88,13 +103,7 @@ async function createCollection(page, name, browser, EANS){
 
         await page.locator(".fa.fa-file-excel-o.fa-lg").nth(1).click(clickTimeout);
         await page.locator("#nam").first().selectOption("Catalogue Données Complètes");
-        /*page.on('download', async download =>{ console.log(await download.path());  
-        await download.saveAs('./data.xlsx');
-        await browser.close();
-        let id = saveToDrive("data.xlsx");
-        console.log("id : "+id);
-      });
-      */
+       
         const downloadPromise = page.waitForEvent('download');
         await page.locator("#dlfile").first().click(clickTimeout);
         const download = await downloadPromise;
@@ -118,7 +127,10 @@ async function createCollection(page, name, browser, EANS){
         console.log("collection not found")
         return null;
     }
+    
 }
+
+run()
 
 module.exports = {scrap: run}
 
