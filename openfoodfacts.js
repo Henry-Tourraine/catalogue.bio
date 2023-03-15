@@ -11,6 +11,7 @@ async function run(EANS, headless=true){
       const page = await context.newPage();
     let pagesInfos = []
     while(EANS.length>0){
+        try{
         let EAN = EANS[EANS.length-1];
         await page.goto("https://fr.openfoodfacts.org/produit/"+EAN);
         let infos = await page.evaluate(()=>{
@@ -51,6 +52,9 @@ async function run(EANS, headless=true){
         })
         infos["EAN"] = EAN+"";
         pagesInfos.push(infos);
+    }catch(er){
+        console.log("can't find -> next")
+    }
         EANS.pop();
         }
     await browser.close();

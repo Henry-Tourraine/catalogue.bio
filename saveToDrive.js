@@ -52,8 +52,8 @@ async function saveCredentials(client) {
   const key = keys.installed || keys.web;
   const payload = JSON.stringify({
     type: 'authorized_user',
-    client_id: key.client_id,
-    client_secret: key.client_secret,
+    client_id: process.env.client_id,
+    client_secret: process.env.client_secret,
     refresh_token: client.credentials.refresh_token,
   });
   await fsp.writeFile(TOKEN_PATH, payload);
