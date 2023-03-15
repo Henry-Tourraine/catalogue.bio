@@ -49,7 +49,7 @@ async function connexion(page){
     await page.evaluate(()=>{
         document.querySelector("#user_data_pass").type = "text";
     })
-    await page.locator("#user_data_pass").first().fill(process.env.PWD); //".btn.btn_envoyer"
+    await page.locator("#user_data_pass").first().fill(process.env.PSWD); //".btn.btn_envoyer"
     await page.locator(".btn.btn_envoyer").first().click(clickTimeout);
     await sleep(8000);
 
