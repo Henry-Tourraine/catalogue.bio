@@ -56,7 +56,7 @@ return;
 
 async function createCollection(page, name, browser, EANS){
     await page.goto("https://back.catalogue.bio/back/configuration/collections");
-    console.log("createCollection EANS ", EANS);
+    console.log("createCollection EANS ",name, EANS);
     await createEAN(name, EANS);
     await sleep(5000);
     await page.locator("#buttonadd").first().click(clickTimeout);
