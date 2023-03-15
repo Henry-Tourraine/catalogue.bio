@@ -21,7 +21,7 @@ async function sleep(time){
   return await new Promise((res, rej)=>{setTimeout(()=>res(), time)});
 }
 
-async function run(EANS=["3483190000154"], name="test_", headless=false){
+async function run(EANS=["3483190000154"], name="test_", headless=true){
 
     const browser = await chromium.launch({headless});
     const context = await browser.newContext({recordVideo: { 
@@ -130,7 +130,7 @@ async function createCollection(page, name, browser, EANS){
     
 }
 
-run()
+
 
 module.exports = {scrap: run}
 
