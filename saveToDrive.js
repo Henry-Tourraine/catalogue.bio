@@ -109,9 +109,9 @@ async function  getAccountDriveService(){
 }
 
 
-async function saveToDrive(name, isAccountService=false){
+async function saveToDrive(name){
 
-const Drive = isAccountService==false?await getDriveService2():await getAccountDriveService();
+const Drive = process.env.PROD==false?await getDriveService2():await getAccountDriveService();
 
 const {data} = await Drive.files.create({
     media: {
