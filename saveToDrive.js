@@ -8,11 +8,15 @@ let XLSX = require('xlsx');
 const stream = require('stream');
 const { google } = require('googleapis');
 const {authenticate} = require('@google-cloud/local-auth');
+const dotenv = require("dotenv");
+dotenv.config();
+
+const SCOPES = ['https://www.googleapis.com/auth/drive'];
 
 //with service account
 const getDriveService = () => {
     const KEYFILEPATH = './service.json';
-    const SCOPES = ['https://www.googleapis.com/auth/drive'];
+    
   
     const auth = new google.auth.GoogleAuth({
       keyFile: KEYFILEPATH,
@@ -25,8 +29,6 @@ const getDriveService = () => {
 
 
 
-
-const SCOPES = ['https://www.googleapis.com/auth/drive'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -97,9 +99,20 @@ let getDriveService2 = async()=>{
 }
 
 
-async function saveToDrive(name){
+async function  getAccountDriveService(){
+  const credentialFilename = path.join(__dirname, "serviceAccountCredentials.json");
 
-const Drive = await getDriveService2();
+  const auth = new google.auth.GoogleAuth({keyFile: credentialFilename, scopes: SCOPES});
+  const drive = google.drive({ version: "v3", auth });
+  return drive;
+
+}
+
+
+async function saveToDrive(name, isAccountService=false){
+
+const Drive = isAccountService==false?await getDriveService2():await getAccountDriveService();
+
 const {data} = await Drive.files.create({
     media: {
       mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -109,7 +122,7 @@ const {data} = await Drive.files.create({
       name: "data.xlsx",
       mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       //file needs to be shared with service account address
-      parents: ['1CTrDjdsKbBihUPZpEr5glHMiqZG2hUzY'],
+      parents: ['1dCCR6_8H_xc81prW5YfSbcfBxcjOXSJA'],
     },
     fields: 'id,name',
   });
@@ -118,6 +131,7 @@ const {data} = await Drive.files.create({
 
   console.log(data);
   return data;
+  
 };
 
 
