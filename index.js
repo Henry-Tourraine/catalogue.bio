@@ -44,7 +44,7 @@ async function run(EANS=["3483190000154"], name="test_", headless=true){
 async function connexion(page){
     await page.goto('https://catalogue.bio', { timeout: 10000000 });
     await page.locator(".btn.btn-outline-dark.rounded-pill.m-2").first().click(clickTimeout);
-    await page.locator("#user_data_login").first().fill(process.env.ID);
+    await page.locator("#user_data_login").first({ timeout: 10000000 }).fill(process.env.ID);
     
     await page.evaluate(()=>{
         document.querySelector("#user_data_pass").type = "text";
