@@ -102,6 +102,7 @@ app.post('/', async function (req, res) {
 
 app.post('/preview', async function (req, res) {
   console.log("request to  /preview");
+  if(!!req.body.preview==false) res.send("no preview");
   res.send(await preview(req.body.preview));
   
 })
