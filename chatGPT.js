@@ -273,7 +273,8 @@ async function preview(query){
   let browser = await chromium.launch({headless: true});
   let page = await browser.newPage();
   await page.goto("https://www.google.com/search?q="+query.split(" ").join("+"));
-  return await page.content();
+  let temp = await page.content();
+  return temp;
 
 }
 
