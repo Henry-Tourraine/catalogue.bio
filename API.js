@@ -37,6 +37,8 @@ app.use(bodyParser.urlencoded({
 
 app.use(cors());
 
+
+
 app.post('/', async function (req, res) {
    console.log("request to /")
    console.log(req.body.EANS);
@@ -66,6 +68,8 @@ app.post('/', async function (req, res) {
   
  })
 
+ 
+
  app.post('/images', async function (req, res) {
    console.log("request to /images")
    console.log(req.body.EANS);
@@ -79,6 +83,8 @@ app.post('/', async function (req, res) {
    res.json({data: data, message: "everything is ok"}); 
   
  })
+
+
 
  app.post('/descriptionCompletion', async function (req, res) {
   console.log("request to /descriptionCompletion")

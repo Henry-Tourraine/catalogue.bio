@@ -26,6 +26,7 @@ async function run(EANS=["3770009690256","3380390410403","3380390410304"], headl
     while(EANS.length>0){
         let EAN = EANS[0];
         if(EAN[0] != ""){
+            try{
             await page.goto("https://fr.openfoodfacts.org/produit/"+EAN, {timeout: 300000});
             if(await page.locator("text='Tout accepter'").count() > 0) await page.click("text='Tout accepter'")
             
@@ -69,14 +70,17 @@ async function run(EANS=["3770009690256","3380390410403","3380390410304"], headl
             }
             return t;
             });
+            }catch(navErr){
+                console.log(navErr);
+            }
         }
         
-        
-        if(infos.title != undefined){
-            await page.goto("https://www.google.com/search?q="+infos.title+"-"+EAN+"&tbm=isch&tbs=isz:l");
-        }else{
-            await page.goto("https://www.google.com/search?q="+EAN+"&tbm=isch&tbs=isz:l");
-        }
+        try{
+        //if(infos.title != undefined){
+       //     await page.goto("https://www.google.com/search?q="+infos.title+"-"+EAN+"&tbm=isch&tbs=isz:l");
+       // }else{
+            await page.goto("https://www.google.com/search?q="+EAN+"&source=lnms&tbm=isch");
+        //}
         
         await new Promise((res, rej)=>{setTimeout(()=>{res()}, 2000)});
         if(await page.locator(".QS5gu.sy4vM").count() > 0) await page.click(".QS5gu.sy4vM")
@@ -90,6 +94,11 @@ async function run(EANS=["3770009690256","3380390410403","3380390410304"], headl
         }
         t[EAN] = [[infos.img], ...images];
         console.log(t)
+        
+        }catch(er){
+            console.log(er);
+        }
+
         EANS.shift();
         
     }
