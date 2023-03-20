@@ -4,7 +4,7 @@ let XLSX = require('xlsx');
 let { scrap } = require("./index.js");
 let openfoodfacts = require("./openfoodfacts");
 let {getImages, getImagesWithOFF} = require("./image");
-const { makeCompletion } = require("./chatGPT.js");
+const { makeCompletion, preview } = require("./chatGPT.js");
 let dotenv = require("dotenv");
 dotenv.config();
 //const nodeCmd = require('node-cmd');
@@ -100,6 +100,12 @@ app.post('/', async function (req, res) {
 
 })
 
+app.post('/preview', async function (req, res) {
+  console.log("request to  /preview");
+  res.send(await preview(req.body.preview));
+  
+})
+
  app.get('/', function (req, res) {
     
     res.send("hello");
@@ -108,7 +114,7 @@ app.post('/', async function (req, res) {
 
 //nodeCmd.run('dir', (err, data, stderr) => console.log(data));
 app.listen(process.env.PORT | arguments.p, () => {
- console.log("Server running on port "+arguments.p);
+ console.log("Server running on port "+process.env.PORT);
 });
 
 
