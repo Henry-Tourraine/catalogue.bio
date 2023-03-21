@@ -98,7 +98,31 @@ async function createCollection(page, name, browser, EANS){
         await page.locator("button#go").click(clickTimeout);
         await sleep(5000);
        await page.locator("button.ui-dialog-titlebar-close").first().click(clickTimeout);
+      
+       await page.goto(" https://back.catalogue.bio/back/importexport/export", {timeout: 300000});
+       await page.locator("#idty").nth(0).selectOption({label: "Une collection"});
+       let name_ = name.toLowerCase();
+       name_ = name_[0].toUpperCase() + name_.substring(1);
+       console.log(name_);
+       await page.locator("#id_collection").nth(0).selectOption({label: name_});
 
+       const downloadPromise = page.waitForEvent('download');
+       await page.locator("#go").nth(0).click();
+       const download = await downloadPromise;
+       await download.saveAs('./data.xlsx');
+      let name_id = saveToDrive("data.xlsx");
+       fs.unlinkSync("./"+name+".xlsx");
+       await page.goto("https://back.catalogue.bio/back/configuration/collections");
+        let collections = page.locator(".collection-item");
+        for(let i=0; i<await collections.count(); i++){
+            let colToRemove = await collections.nth(i);
+            if(await colToRemove.locator("input[type='text']").first().inputValue() == name){
+                await colToRemove.locator("button[title='Supprimer la collection']").first().click();
+            }
+        }
+
+
+       /*
         await col_element.locator(".fa.fa-eye").first().click(clickTimeout);
 
         await page.locator(".fa.fa-file-excel-o.fa-lg").nth(1).click(clickTimeout);
@@ -118,6 +142,7 @@ async function createCollection(page, name, browser, EANS){
                 await colToRemove.locator("button[title='Supprimer la collection']").first().click();
             }
         }
+        */
         await browser.close();
         console.log("browser closed");
         return name_id;

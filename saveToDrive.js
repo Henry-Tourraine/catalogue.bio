@@ -110,8 +110,8 @@ async function  getAccountDriveService(){
 
 
 async function saveToDrive(name){
-
-const Drive = process.env.PROD==false?await getDriveService2():await getAccountDriveService();
+console.log("prod ", process.env.PROD)
+const Drive = process.env.PROD=='false'?await getDriveService2():await getAccountDriveService();
 
 const {data} = await Drive.files.create({
     media: {
@@ -122,7 +122,7 @@ const {data} = await Drive.files.create({
       name: "data.xlsx",
       mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       //file needs to be shared with service account address
-      parents: ['1dCCR6_8H_xc81prW5YfSbcfBxcjOXSJA'],
+      parents: [process.env.FOLDER_ID],
     },
     fields: 'id,name',
   });
