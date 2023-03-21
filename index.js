@@ -77,10 +77,10 @@ async function createCollection(page, name, browser, EANS){
     await page.locator("#buttonadd").first().click(clickTimeout);
     await page.locator("#new_collection").first().fill(name);
     await page.locator("#new_collection_save").first().click(clickTimeout);
-    await sleep(2000);
+    await sleep(5000);
     let collections = page.locator(".collection-item");
     let col_element = null;
-    for(let collection=(await collections.count())-1; collection >= 0; collection--){
+    for(let collection=(await collections.count(clickTimeout))-1; collection >= 0; collection--){
         let col_name = await collections.nth(collection).locator(".divinput input").first().getAttribute("value");
         if(col_name ==  name){
             console.log((await collections.nth(collection).getAttribute("id")).replace("Collec_", ""));
