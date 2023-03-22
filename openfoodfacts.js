@@ -37,7 +37,7 @@ async function run(EANS, headless=true){
         }
         try{
             let nutrition = {};
-            [...document.querySelectorAll("table tbody tr")].map(tr=>{let infos=tr.querySelectorAll("td"); nutrition[infos[0].textContent.trim()] = infos[1].textContent.replace("\n", "").trim().replace(" ", "")});
+            [...document.querySelectorAll("table tbody tr")].map(tr=>{let infos=tr.querySelectorAll("td"); nutrition[infos[0].textContent.trim()] = infos[1].textContent.replace(/\n/g, "").trim().replace(" ", "")});
             nutrition["Énergie"] = nutrition["Énergie"].substring(0, nutrition["Énergie"].length-1).replace("kj", " Kj ").replace("kcal", " Kcal").replace("(", "/ ")
 
             t = {...t, ...nutrition}
