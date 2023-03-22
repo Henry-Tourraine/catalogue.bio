@@ -224,7 +224,7 @@ async function makeCompletion(prompt="hello how are you ?", searchKeyWords=null)
           });
           console.log("length "+completion.data.choices.length+" \n"+completion.data.choices[0].text);
           */
-          if(searchKeyWords!=null){
+          if(searchKeyWords.length>0){
             let rich = await shallowResearch(searchKeyWords);
             //ONLY ONE } IN PROMPT
             let b = prompt.split("}");
