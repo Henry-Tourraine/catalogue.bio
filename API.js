@@ -94,8 +94,8 @@ app.post('/', async function (req, res) {
      return;
   }
   let response;
-  if(!!req.body.theme.trim() == true && !!req.body.searchKeyWords == true){
-    response = await makeCompletion(req.body.prompt, req.body.theme, req.body.searchKeyWords);
+  if(!!req.body.searchKeyWords == true){
+    response = await makeCompletion(req.body.prompt, req.body.searchKeyWords);
   }else{
     response = await makeCompletion(req.body.prompt);
   }

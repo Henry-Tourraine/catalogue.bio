@@ -16,7 +16,7 @@ async function sleep(time){
   return await new Promise((res, rej)=>{setTimeout(()=>res(), time)});
 }
 
-async function shallowResearch(word, features, headless=true){
+async function shallowResearch(features, headless=true){
 
     const browser = await chromium.launch({headless, use: {
       locale: 'fr-FR',
@@ -27,8 +27,8 @@ async function shallowResearch(word, features, headless=true){
     let results = {};
     while(features.length>0){
       let f = features[0];
-      if(f.includes("recette")){
-        await page.goto("https://chefsimon.com/recettes/search?utf8=%E2%9C%93&search_string=recettes+"+word);
+      if(f.name.includes("recette")){
+        await page.goto("https://chefsimon.com/recettes/search?utf8=%E2%9C%93&search_string=recettes+"+f.value);
         try{
           await page.locator("text='Autoriser'", {timeout: 2000}).first().click();
         }catch(e){}
@@ -42,14 +42,10 @@ async function shallowResearch(word, features, headless=true){
 
         if(!!recettes) results["recettes"] = recettes;
       }else{
-      let query = '"'+f+'"';
-      if(!query.includes("origine")){
-        query = (f[f.length-1] == "s"? 'quels sont les ':'quel est ')+query+' de "'+word+'" ? ';
-      }else{
-        query = query+' '+word;
-      }
+      let query = f.value;
+      
      
-      await page.goto("https://www.google.com/search?q="+query);
+      await page.goto("https://www.google.com/search?q="+query.split(" ").join("+"));
      
       try{
         await page.locator("text='Tout accepter'", {timeout: 2000}).first().click();
@@ -181,10 +177,10 @@ async function shallowResearch(word, features, headless=true){
         }*/
         console.log("questions "+typeof questions)
         console.log(questions);
-        results[features[0]] = (!!excerpt==true?"Meta-description :\n"+excerpt+"\n\n":"")+(!!questions==true?"\n"+questions.map((e, index)=>"Question "+index+" : "+e.question+"\nAnswer "+index+" : "+e.answer).join("\n\n"):"");
+        results[features[0].name] = (!!excerpt==true?"Meta-description :\n"+excerpt+"\n\n":"")+(!!questions==true?"\n"+questions.map((e, index)=>"Question "+index+" : "+e.question+"\nAnswer "+index+" : "+e.answer).join("\n\n"):"");
         
         
-        results[features[0]]+=(sitesList.length>0 && results[features[0]].length < 400?"\n\nLinks : "+sitesList.map((e, index)=>"\n link "+index+" : "+e.h3+"\n"+e.infos).join("\n\n"):"");
+        results[features[0].name]+=(sitesList.length>0 && results[features[0]].length < 400?"\n\nLinks : "+sitesList.map((e, index)=>"\n link "+index+" : "+e.h3+"\n"+e.infos).join("\n\n"):"");
       }
         features.shift();
       
@@ -218,7 +214,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 
-async function makeCompletion(prompt="hello how are you ?", theme=null, searchKeyWords=null){
+async function makeCompletion(prompt="hello how are you ?", searchKeyWords=null){
     let response = {}
     if(prompt != null && prompt.length > 1){
       try {
@@ -228,8 +224,8 @@ async function makeCompletion(prompt="hello how are you ?", theme=null, searchKe
           });
           console.log("length "+completion.data.choices.length+" \n"+completion.data.choices[0].text);
           */
-          if(theme!=null && searchKeyWords!=null){
-            let rich = await shallowResearch(theme, searchKeyWords);
+          if(searchKeyWords!=null){
+            let rich = await shallowResearch(searchKeyWords);
             //ONLY ONE } IN PROMPT
             let b = prompt.split("}");
             let m="";
