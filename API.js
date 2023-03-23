@@ -102,7 +102,6 @@ app.post('/', async function (req, res) {
    console.log("responding")
    console.log(response);
   res.json({...response});
-   
 })
 
 app.post('/preview', async function (req, res) {
