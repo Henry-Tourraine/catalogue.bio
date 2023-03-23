@@ -131,10 +131,10 @@ async function shallowResearch(features, headless=true){
                 await pairs.nth(y).click();
                 temp.push(pairs.nth(y));
               }
-              await temp[0].locator(".wWOJcd").nth(0).textContent();//MBtdbb  wWOJcd
+              await temp[0].locator(".dnXCYb").nth(0).textContent();//MBtdbb  wWOJcd
 
               questions = temp.map(async(e)=>{
-                let q = await e.locator(".wWOJcd").nth(0).textContent();
+                let q = await e.locator(".dnXCYb").nth(0).textContent();
                
                 let a= (await e.locator(".MBtdbb ").textContent()).replace(q, "").replace(q, "").split(/\.\d/)[0];
                 return {question : q, answer: a.split("http")[0]}
