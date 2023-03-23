@@ -50,6 +50,7 @@ app.post('/', async function (req, res) {
     console.log(data);
    res.json({data: data, message: "everything is ok"});
  
+   
  })
 
  app.post('/openfoodfacts', async function (req, res) {
