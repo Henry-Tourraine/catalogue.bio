@@ -12,7 +12,6 @@ dotenv.config();
 var app = express();
 
 
-
 let a = process.argv.slice(2);
 console.log(a);
 console.log(a.length)
