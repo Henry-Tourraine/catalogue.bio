@@ -37,7 +37,6 @@ app.use(bodyParser.urlencoded({
 app.use(cors());
 
 
-
 app.post('/', async function (req, res) {
    console.log("request to /")
    console.log(req.body.EANS);
