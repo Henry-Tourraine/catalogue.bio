@@ -20,7 +20,7 @@ for(let i=0; i<a.length-1; i+=2){
     let t={};
     t[a[i].replace(/-/g, "")]= a[i+1];
     arguments={...arguments, ...t};
-    
+
 }
 
 
@@ -50,7 +50,6 @@ app.post('/', async function (req, res) {
     console.log(data);
    res.json({data: data, message: "everything is ok"});
  
-
  })
 
  app.post('/openfoodfacts', async function (req, res) {
