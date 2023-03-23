@@ -13,7 +13,6 @@ var app = express();
 
 
 
-
 let a = process.argv.slice(2);
 console.log(a);
 console.log(a.length)
@@ -102,7 +101,7 @@ app.post('/', async function (req, res) {
    console.log("responding")
    console.log(response);
   res.json({...response});
-  
+
 })
 
 app.post('/preview', async function (req, res) {
