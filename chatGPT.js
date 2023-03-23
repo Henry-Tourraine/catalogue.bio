@@ -8,6 +8,7 @@ require("dotenv").config();
 const { Configuration, OpenAIApi } = require("openai");
 const { count } = require('console');
 const { apigeeregistry } = require('googleapis/build/src/apis/apigeeregistry/index.js');
+const { features } = require('process');
 
 let data = [];
 let clickTimeout = { timeout: 3000000 }
@@ -15,6 +16,7 @@ let clickTimeout = { timeout: 3000000 }
 async function sleep(time){
   return await new Promise((res, rej)=>{setTimeout(()=>res(), time)});
 }
+//shallowResearch([{name:"origine", value:"Quelle est l'origine de la courgette ?"}], false);
 
 async function shallowResearch(features, headless=true){
 
@@ -127,7 +129,7 @@ async function shallowResearch(features, headless=true){
             
               pairs = page.locator(".wQiwMc.related-question-pair");
               let temp = [];
-              for(let y=0;y<Math.min(await pairs.count(), 5); y++){
+              for(let y=0;y<Math.min(await pairs.count(), 2); y++){
                 await pairs.nth(y).click();
                 temp.push(pairs.nth(y));
               }
@@ -136,7 +138,7 @@ async function shallowResearch(features, headless=true){
               questions = temp.map(async(e)=>{
                 let q = await e.locator(".dnXCYb").nth(0).textContent();
                
-                let a= (await e.locator(".MBtdbb ").textContent()).replace(q, "").replace(q, "").split(/\.\d/)[0];
+                let a= (await e.textContent()).replace(q, "").replace(q, "").split(/\.\d/)[0];
                 return {question : q, answer: a.split("http")[0]}
               });
               questions = await Promise.all(questions)
@@ -180,7 +182,7 @@ async function shallowResearch(features, headless=true){
         results[features[0].name] = (!!excerpt==true?"Meta-description :\n"+excerpt+"\n\n":"")+(!!questions==true?"\n"+questions.map((e, index)=>"Question "+index+" : "+e.question+"\nAnswer "+index+" : "+e.answer).join("\n\n"):"");
         
         
-        results[features[0].name]+=(sitesList.length>0 && results[features[0]].length < 400?"\n\nLinks : "+sitesList.map((e, index)=>"\n link "+index+" : "+e.h3+"\n"+e.infos).join("\n\n"):"");
+        results[features[0].name]+=(sitesList.length>0 && results[features[0].name].length < 400?"\n\nLinks : "+sitesList.map((e, index)=>"\n link "+index+" : "+e.h3+"\n"+e.infos).join("\n\n"):"");
       }
         features.shift();
       
@@ -191,7 +193,7 @@ async function shallowResearch(features, headless=true){
       }
       console.log("-------------------------------------");
       console.log(q);
-      //await browser.close();
+      await browser.close();
       return results;
     
 }
