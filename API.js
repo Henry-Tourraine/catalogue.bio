@@ -22,6 +22,7 @@ for(let i=0; i<a.length-1; i+=2){
     arguments={...arguments, ...t};
 }
 
+
 app.use(express.static('public'));
 app.set("view engine", "ejs");
 app.use(express.json());
