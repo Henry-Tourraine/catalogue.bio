@@ -48,7 +48,6 @@ app.post('/', async function (req, res) {
     console.log("responding")
     console.log(data);
    res.json({data: data, message: "everything is ok"});
-    
  
  })
 
